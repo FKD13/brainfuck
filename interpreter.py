@@ -73,6 +73,3 @@ class Interpreter:
             else:
                 raise ValueError(f"{self.brainfuck[self.action_pointer]} is not a brainfuck character")
             self.action_pointer += 1
-
-
-Interpreter("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.").interpret()
