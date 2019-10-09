@@ -35,8 +35,6 @@ class Interpreter:
 
     def decrease_memory_value(self) -> None:
         self.memory[self.memory_pointer] -= 1
-        if self.memory[self.memory_pointer] < 0:
-            raise ValueError("Memory value can't be less than 0")
 
     def print_memory_value(self) -> None:
         print(chr(self.memory[self.memory_pointer]), end='')
@@ -52,8 +50,15 @@ class Interpreter:
 
     def start_loop(self) -> None:
         if self.memory[self.memory_pointer] == 0:
+            i = 0
             while self.action_pointer < len(self.brainfuck) and self.brainfuck[self.action_pointer] != ']':
                 self.action_pointer += 1
+                if self.brainfuck[self.action_pointer] == '[':
+                    i += 1
+                elif i > 0 and self.brainfuck[self.action_pointer] == ']':
+                    i -= 1
+                    self.action_pointer += 1
+
             if self.action_pointer == len(self.brainfuck):
                 raise RuntimeError('Closing ] not found')
         else:
@@ -65,6 +70,8 @@ class Interpreter:
                 self.action_pointer = self.stack.pop(-1) - 1
             else:
                 raise RuntimeError('Opening [ not found')
+        else:
+            self.stack.pop(-1)
 
     def interpret(self) -> None:
         while self.action_pointer < len(self.brainfuck):
